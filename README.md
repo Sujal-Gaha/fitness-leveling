@@ -1,101 +1,70 @@
-# NxProjectSetup
+# Nx Project Setup
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This repository serves as a reusable Nx monorepo setup with a frontend and backend application, as well as several libraries for backend database interactions, reusable components, and domain logic.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Applications
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+### Backend
 
-## Run tasks
+The backend application is responsible for the server-side logic of the project. It handles API requests and serves data to the frontend.
 
-To run the dev server for your app, use:
+### Frontend
 
-```sh
-npx nx serve backend
-```
+The frontend application is responsible for the client-side interface. It interacts with the backend to provide a seamless user experience.
 
-To create a production bundle:
+## Libraries
 
-```sh
-npx nx build backend
-```
+### Backend-DB
 
-To see all available targets to run for a project, run:
+This library contains all database interactions and models. It ensures a clean separation of data logic from the backend application.
 
-```sh
-npx nx show project backend
-```
+### Components
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+This library contains reusable UI components used across the frontend application. It promotes reusability and maintainability of the codebase.
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Domains
 
-## Add new projects
+This library contains the domain logic and business rules. It ensures that the domain logic is decoupled from the application logic, making it easier to maintain and scale.
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+## Getting Started
 
-Use the plugin's generator to create new projects.
+### Prerequisites
 
-To generate a new application, use:
+- [Node.js](https://nodejs.org/) (v14.x or higher)
+- [Yarn](https://yarnpkg.com/) (recommended for package management)
 
-```sh
-npx nx g @nx/node:app demo
-```
+### Installation
 
-To generate a new library, use:
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Sujal-Gaha/nx-project-setup.git
+   ```
 
-```sh
-npx nx g @nx/node:lib mylib
-```
+2. Go inside the repository and install the dependencies:
+    ```sh
+    yarn install
+    ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+3. Remove the existing remote origin:
+    ```sh
+    git remote remove origin
+    ```
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+4. Add your GitHub repository as the new remote origin:
+    ```sh
+    git remote add origin https://github.com/your-username/your-repo-name.git
+    ```
 
-## Set up CI!
+5. Verify the new remote origin:
+    ```sh
+    git remote -v
+    ```
 
-### Step 1
+6. Run the command: (`Optional`)
+    ```sh
+    yarn dev:frontend // for running the frontend application
+    yarn dev:backend // for running the backend application
+    yarn build // for building the projects
+    ```
 
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Enjoy coding and feel free to modify this README to better suit your project's needs!
