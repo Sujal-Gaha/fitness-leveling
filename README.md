@@ -62,9 +62,9 @@ This library contains the domain logic and business rules. It ensures that the d
 
 6. Run the command: (`Optional`)
     ```sh
-    yarn dev:frontend // for running the frontend application
-    yarn dev:backend // for running the backend application
-    yarn build // for building the projects
+    yarn dev:frontend # for running the frontend application
+    yarn dev:backend # for running the backend application
+    yarn build # for building the projects
     ```
 
 ## Enjoy coding and feel free to modify this README to better suit your project's needs!

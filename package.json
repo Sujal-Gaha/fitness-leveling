@@ -2,7 +2,13 @@
   "name": "@nx-project-setup/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev:frontend": "nx run frontend:serve",
+    "dev:backend": "nx run backend:serve",
+    "build:frontend": "nx run frontend:build --configuration=production",
+    "build:backend": "nx run backend:build --configuration=production",
+    "build": "yarn build:frontend && yarn build:backend"
+  },
   "private": true,
   "dependencies": {
     "axios": "^1.6.0",
