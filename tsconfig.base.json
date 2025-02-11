@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@libs/backend-db": ["libs/backend-db/src/index.ts"],
+      "@libs/components": ["libs/components/src/index.ts"],
+      "@libs/domains": ["libs/domains/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

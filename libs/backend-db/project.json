@@ -1,0 +1,20 @@
+{
+  "name": "backend-db",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend-db/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend-db",
+        "tsConfig": "libs/backend-db/tsconfig.lib.json",
+        "packageJson": "libs/backend-db/package.json",
+        "main": "libs/backend-db/src/index.ts",
+        "assets": ["libs/backend-db/*.md"]
+      }
+    }
+  }
+}
