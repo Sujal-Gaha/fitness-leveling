@@ -67,4 +67,18 @@ This library contains the domain logic and business rules. It ensures that the d
     yarn build # for building the projects
     ```
 
+### Fetching Other Branches
+
+- If you want to explore different setups, you can fetch other branches as well. For example, to get the Nx project setup with shadcn components:
+
+    ```sh
+    git fetch origin sujal/setup-shadcn
+    git checkout sujal/setup-shadcn
+    ```
+- To check other branches, you can list all available branches:
+
+    ```sh
+    git branch -a
+    ```
+
 ## Enjoy coding and feel free to modify this README to better suit your project's needs!
