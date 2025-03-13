@@ -11,10 +11,16 @@ import {
   CardTitle,
   cn,
   Input,
-  Label,
   ScrollArea,
   Textarea,
 } from '@libs/components';
+import { useLocation } from 'react-router-dom';
+
+const useQuery = () => {
+  const location = useLocation();
+  return new URLSearchParams(location.search);
+};
+
 type Message = {
   id: string;
   role: 'user' | 'assistant';
@@ -30,7 +36,9 @@ type Conversation = {
 };
 
 export const AIGeneratorPage = () => {
-  const [prompt, setPrompt] = useState('');
+  const query = useQuery();
+  const initialPrompt = query.get('prompt') || '';
+  const [prompt, setPrompt] = useState(initialPrompt);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showWorkout, setShowWorkout] = useState(false);
   const [addedToRoutine, setAddedToRoutine] = useState(false);
