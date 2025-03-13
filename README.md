@@ -1,84 +1,47 @@
-# Nx Project Setup
+**Gamified Fitness App Concept: "Fitness Leveling"**
 
-This repository serves as a reusable Nx monorepo setup with a frontend and backend application, as well as several libraries for backend database interactions, reusable components, and domain logic.
+**Objective:**
+To create an engaging fitness app that leverages gaming elements to motivate users towards achieving their health goals.
 
-## Applications
+**Concept Overview:**
+"Fitness Leveling" is a unique blend of fitness and gaming, designed to make your workout routine feel like an adventure. Users earn XP points for completing daily activities, unlock achievements, and progress through levels, making their fitness journey both rewarding and fun.
 
-### Backend
+**Key Features:**
 
-The backend application is responsible for the server-side logic of the project. It handles API requests and serves data to the frontend.
+1. **XP Points System:**
+   - Earn XP points by completing daily routines such as workouts, healthy eating habits, and tracking physical activity.
+   - Points accumulate based on the difficulty and consistency of tasks completed.
 
-### Frontend
+2. **Levels & Progression:**
+   - Users progress through levels as they earn more XP points.
+   - Each level unlocks new features, challenges, or rewards, keeping users motivated to advance further.
 
-The frontend application is responsible for the client-side interface. It interacts with the backend to provide a seamless user experience.
+3. **Achievements & Badges:**
+   - Earn badges for completing specific milestones or challenges.
+   - Display achievements in a profile section to showcase accomplishments.
 
-## Libraries
+4. **Challenges & Streaks:**
+   - Participate in daily, weekly, or monthly challenges to earn bonus points.
+   - Maintain streaks for consistent activity to unlock special rewards.
 
-### Backend-DB
+5. **Social Interaction:**
+   - Compete with friends or join leaderboards to add a competitive edge.
+   - Share achievements and progress on social media to encourage others.
 
-This library contains all database interactions and models. It ensures a clean separation of data logic from the backend application.
+6. **Rewards System:**
+   - redeem XP points for rewards such as fitness gear, discounts, or app features.
+   - Offer surprise rewards for streaks or exceptional achievements.
 
-### Components
+7. **Personalized Goals & Tracking:**
+   - Set custom fitness goals aligned with personal preferences and capabilities.
+   - Track progress through interactive charts and graphs to visualize improvement.
 
-This library contains reusable UI components used across the frontend application. It promotes reusability and maintainability of the codebase.
+8. **Interactive Content:**
+   - Engage in mini-games or quests related to fitness, such as completing a virtual obstacle course or earning rewards for healthy eating challenges.
+   - Participate in gamified workouts led by virtual trainers.
 
-### Domains
+**Game Mechanics Balance:**
+While integrating game mechanics like XP points and levels is essential for engagement, it's crucial to ensure these elements complement the health benefits rather than overshadowing them. Clear communication about the impact of physical activities on health will maintain the app's primary purpose while enhancing user experience through gamification.
 
-This library contains the domain logic and business rules. It ensures that the domain logic is decoupled from the application logic, making it easier to maintain and scale.
-
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v14.x or higher)
-- [Yarn](https://yarnpkg.com/) (recommended for package management)
-
-### Installation
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/Sujal-Gaha/nx-project-setup.git
-   ```
-
-2. Go inside the repository and install the dependencies:
-    ```sh
-    yarn install
-    ```
-
-3. Remove the existing remote origin:
-    ```sh
-    git remote remove origin
-    ```
-
-4. Add your GitHub repository as the new remote origin:
-    ```sh
-    git remote add origin https://github.com/your-username/your-repo-name.git
-    ```
-
-5. Verify the new remote origin:
-    ```sh
-    git remote -v
-    ```
-
-6. Run the command: (`Optional`)
-    ```sh
-    yarn dev:frontend # for running the frontend application
-    yarn dev:backend # for running the backend application
-    yarn build # for building the projects
-    ```
-
-### Fetching Other Branches
-
-- If you want to explore different setups, you can fetch other branches as well. For example, to get the Nx project setup with shadcn components:
-
-    ```sh
-    git fetch origin sujal/setup-shadcn
-    git checkout sujal/setup-shadcn
-    ```
-- To check other branches, you can list all available branches:
-
-    ```sh
-    git branch -a
-    ```
-
-## Enjoy coding and feel free to modify this README to better suit your project's needs!
+**Conclusion:**
+"Fitness Leveling" offers a fresh approach to fitness by transforming routine activities into exciting challenges and achievements. By blending gaming elements with health goals, the app aims to keep users motivated, engaged, and on track towards achieving their best selves in an enjoyable and rewarding manner.
