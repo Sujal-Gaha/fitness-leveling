@@ -28,6 +28,7 @@ import {
 import { ForwardRefExoticComponent, ReactNode, RefAttributes, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { _FULL_ROUTES } from '../app/route';
+import { useUserSettingsModalStore } from '../stores/useUserSettingsModalStore';
 
 type NavItem = {
   id: number;
@@ -38,6 +39,7 @@ type NavItem = {
 
 export const SidebarLayout = ({ children }: { children: ReactNode }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const { openUserSettingsModal } = useUserSettingsModalStore();
 
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
@@ -154,10 +156,11 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
           </div>
           <ul className="mt-2">
             <li>
-              <div
+              <button
                 className={
-                  'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted text-muted-foreground'
+                  'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted text-muted-foreground w-full'
                 }
+                onClick={openUserSettingsModal}
               >
                 <Settings className={cn('h-5 w-5 mr-3', isSidebarOpen ? '' : 'mx-auto')} />
                 <span
@@ -168,7 +171,7 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
                 >
                   Settings
                 </span>
-              </div>
+              </button>
             </li>
           </ul>
         </div>
