@@ -1,10 +1,11 @@
 import { ThemeProvider } from '@libs/components';
-import NxWelcome from './nx-welcome';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router';
 
 export function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <NxWelcome title="frontend" />
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }

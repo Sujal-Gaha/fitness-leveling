@@ -1,0 +1,43 @@
+const AUTH_PATHS = {
+  BASE: '/auth',
+  FORGOT_PASSWORD: 'forgot-password',
+  LOGIN: 'login',
+  REGISTER: 'register',
+};
+
+const ADMIN_PATHS = {
+  BASE: '/admin',
+  DASHBOARD: 'dashboard',
+};
+
+const USER_PATHS = {
+  BASE: '/',
+};
+
+export const _ROUTER_NESTED_PATHS = {
+  AUTH: {
+    BASE: AUTH_PATHS.BASE,
+    FORGOT_PASSWORD: AUTH_PATHS.FORGOT_PASSWORD,
+    LOGIN: AUTH_PATHS.LOGIN,
+    REGISTER: AUTH_PATHS.REGISTER,
+  },
+  ADMIN: {
+    BASE: ADMIN_PATHS.BASE,
+    DASHBOARD: ADMIN_PATHS.DASHBOARD,
+  },
+  USER: {
+    BASE: USER_PATHS.BASE,
+  },
+};
+
+const createFullRoutes = () => {
+  return {
+    HOME: _ROUTER_NESTED_PATHS.USER.BASE,
+    // Auth
+    FORGOT_PASSWORD: `${_ROUTER_NESTED_PATHS.AUTH.BASE}/${_ROUTER_NESTED_PATHS.AUTH.FORGOT_PASSWORD}`,
+    LOGIN: `${_ROUTER_NESTED_PATHS.AUTH.BASE}/${_ROUTER_NESTED_PATHS.AUTH.LOGIN}`,
+    REGISTER: `${_ROUTER_NESTED_PATHS.AUTH.BASE}/${_ROUTER_NESTED_PATHS.AUTH.REGISTER}`,
+  };
+};
+
+export const _FULL_ROUTES = createFullRoutes();
