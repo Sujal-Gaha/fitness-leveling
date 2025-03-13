@@ -13,6 +13,7 @@ export * from './ui/input';
 export * from './ui/label';
 export * from './ui/pagination';
 export * from './ui/progress';
+export * from './ui/scroll-area';
 export * from './ui/separator';
 export * from './ui/sheet';
 export * from './ui/sidebar';
