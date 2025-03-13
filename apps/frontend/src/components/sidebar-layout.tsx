@@ -12,40 +12,68 @@ import {
   DropdownMenuTrigger,
   Progress,
 } from '@libs/components';
-import { Award, Brain, Dumbbell, LayoutDashboard, ListChecks, Menu, Settings, Trophy, User, Zap } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import {
+  Award,
+  Brain,
+  Dumbbell,
+  LayoutDashboard,
+  ListChecks,
+  LucideProps,
+  Menu,
+  Settings,
+  Trophy,
+  User,
+  Zap,
+} from 'lucide-react';
+import { ForwardRefExoticComponent, ReactNode, RefAttributes, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { _FULL_ROUTES } from '../app/route';
+
+type NavItem = {
+  id: number;
+  label: string;
+  icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
+  url: string;
+};
 
 export const SidebarLayout = ({ children }: { children: ReactNode }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
+  const openSidebar = () => setSidebarOpen(true);
+  const closeSidebar = () => setSidebarOpen(false);
+
   const location = useLocation();
 
-  const navItems = [
+  const navItems: NavItem[] = [
     {
-      id: '/',
+      id: 1,
       label: 'Dashboard',
       icon: LayoutDashboard,
+      url: _FULL_ROUTES.HOME,
     },
     {
-      id: '/workouts',
+      id: 2,
       label: 'Workouts',
       icon: Dumbbell,
+      url: '/workouts',
     },
     {
-      id: '/ai-generator',
+      id: 3,
       label: 'AI Generator',
       icon: Brain,
+      url: _FULL_ROUTES.AI_GENERATOR,
     },
     {
-      id: '/daily-routine',
+      id: 4,
       label: 'Daily Routine',
       icon: ListChecks,
+      url: '/daily-routine',
     },
     {
-      id: '/achievements',
+      id: 5,
       label: 'Achievements',
       icon: Trophy,
+      url: '/achievements',
     },
   ];
 
@@ -89,10 +117,10 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
             {navItems.map((item) => (
               <li key={item.id}>
                 <Link
-                  to={item.id}
+                  to={item.url}
                   className={cn(
                     'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted',
-                    location.pathname === item.id ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
+                    location.pathname === item.url ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
                   )}
                 >
                   <item.icon className={cn('h-5 w-5 mr-3', isSidebarOpen ? '' : 'mx-auto')} />
@@ -155,7 +183,7 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
       >
         {/* Header */}
         <header className="sticky top-0 z-30 flex h-16 items-center border-b bg-background px-4 md:px-6">
-          <Button variant="ghost" size="icon" className="mr-2 md:hidden" onClick={() => setSidebarOpen(true)}>
+          <Button variant="ghost" size="icon" className="mr-2 md:hidden" onClick={openSidebar}>
             <Menu className="h-5 w-5" />
           </Button>
 
