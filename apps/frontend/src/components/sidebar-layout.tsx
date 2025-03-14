@@ -35,6 +35,7 @@ type NavItem = {
   label: string;
   icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
   url: string;
+  isEnabled: boolean;
 };
 
 export const SidebarLayout = ({ children }: { children: ReactNode }) => {
@@ -42,7 +43,7 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
   const { openUserSettingsModal } = useUserSettingsModalStore();
 
   const openSidebar = () => setSidebarOpen(true);
-  const closeSidebar = () => setSidebarOpen(false);
+  // const closeSidebar = () => setSidebarOpen(false);
 
   const location = useLocation();
 
@@ -52,30 +53,35 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
       label: 'Dashboard',
       icon: LayoutDashboard,
       url: _FULL_ROUTES.HOME,
+      isEnabled: true,
     },
     {
       id: 2,
       label: 'Workouts',
       icon: Dumbbell,
       url: '/workouts',
+      isEnabled: false,
     },
     {
       id: 3,
       label: 'AI Generator',
       icon: Brain,
       url: _FULL_ROUTES.AI_GENERATOR,
+      isEnabled: true,
     },
     {
       id: 4,
       label: 'Daily Routine',
       icon: ListChecks,
       url: _FULL_ROUTES.DAILY_ROUTINE,
+      isEnabled: true,
     },
     {
       id: 5,
       label: 'Achievements',
       icon: Trophy,
       url: _FULL_ROUTES.ACHIEVEMENTS,
+      isEnabled: true,
     },
   ];
 
@@ -116,27 +122,30 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
         {/* Sidebar Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3">
           <ul className="space-y-1">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <Link
-                  to={item.url}
-                  className={cn(
-                    'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted',
-                    location.pathname === item.url ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
-                  )}
-                >
-                  <item.icon className={cn('h-5 w-5 mr-3', isSidebarOpen ? '' : 'mx-auto')} />
-                  <span
+            {navItems.map((item) => {
+              if (!item.isEnabled) return null;
+              return (
+                <li key={item.id}>
+                  <Link
+                    to={item.url}
                     className={cn(
-                      'transition-opacity',
-                      isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden md:block md:opacity-0'
+                      'flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted',
+                      location.pathname === item.url ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
                     )}
                   >
-                    {item.label}
-                  </span>
-                </Link>
-              </li>
-            ))}
+                    <item.icon className={cn('h-5 w-5 mr-3', isSidebarOpen ? '' : 'mx-auto')} />
+                    <span
+                      className={cn(
+                        'transition-opacity',
+                        isSidebarOpen ? 'opacity-100' : 'opacity-0 hidden md:block md:opacity-0'
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
