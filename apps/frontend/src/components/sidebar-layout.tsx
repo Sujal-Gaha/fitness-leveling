@@ -69,7 +69,7 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
       id: 4,
       label: 'Daily Routine',
       icon: ListChecks,
-      url: '/daily-routine',
+      url: _FULL_ROUTES.DAILY_ROUTINE,
     },
     {
       id: 5,

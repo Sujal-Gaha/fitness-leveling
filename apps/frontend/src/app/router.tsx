@@ -4,6 +4,7 @@ import { DashboardPage } from '../pages/dashboard.page';
 import { _FULL_ROUTES } from './route';
 import { AIGeneratorPage } from '../pages/ai-generator.page';
 import { AchievementsPage } from '../pages/achievements.page';
+import { DailyRoutinePage } from '../pages/daily-routine.page';
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: _FULL_ROUTES.ACHIEVEMENTS,
         element: <AchievementsPage />,
+      },
+      {
+        path: _FULL_ROUTES.DAILY_ROUTINE,
+        element: <DailyRoutinePage />,
       },
     ],
   },
