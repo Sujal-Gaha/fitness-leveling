@@ -75,7 +75,7 @@ export const SidebarLayout = ({ children }: { children: ReactNode }) => {
       id: 5,
       label: 'Achievements',
       icon: Trophy,
-      url: '/achievements',
+      url: _FULL_ROUTES.ACHIEVEMENTS,
     },
   ];
 
