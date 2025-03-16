@@ -487,26 +487,6 @@ export const DailyRoutinePage = () => {
       day.date.getFullYear() === today.getFullYear()
   );
 
-  const getDangerMeterColor = () => {
-    if (dangerMeter < 30) return 'bg-green-500';
-    if (dangerMeter < 60) return 'bg-yellow-500';
-    if (dangerMeter < 80) return 'bg-orange-500';
-    return 'bg-red-500';
-  };
-
-  const getSeverityColor = (severity: 'minor' | 'moderate' | 'severe') => {
-    switch (severity) {
-      case 'minor':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700';
-      case 'moderate':
-        return 'bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-700';
-      case 'severe':
-        return 'bg-red-100 text-red-800 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700';
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div>
@@ -515,65 +495,6 @@ export const DailyRoutinePage = () => {
       </div>
 
       {showPenaltyWarning && <PenaltySystem onClose={() => setShowPenaltyWarning(false)} />}
-      <Card className="border-2 border-gray-300 dark:border-gray-700 bg-black/5 dark:bg-white/5">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center text-xl">
-              <Skull className="h-5 w-5 mr-2 text-red-500" />
-              Hunter Rank System
-            </CardTitle>
-            <Badge variant="outline" className="bg-black/10 dark:bg-white/10 font-mono">
-              RANK E
-            </Badge>
-          </div>
-          <CardDescription>Complete workouts on time to avoid penalties and increase your rank</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium">Danger Meter</span>
-                <span className="font-mono">{dangerMeter}%</span>
-              </div>
-              <div className="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${getDangerMeterColor()} transition-all duration-500`}
-                  style={{ width: `${dangerMeter}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>Safe</span>
-                <span>Warning</span>
-                <span>Danger</span>
-              </div>
-            </div>
-
-            {activeDebuffs.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium">Active Debuffs</h4>
-                <div className="flex flex-wrap gap-2">
-                  {activeDebuffs.map((debuff, index) => (
-                    <div
-                      key={index}
-                      className={`px-3 py-1.5 rounded-md text-sm flex items-center gap-2 ${getSeverityColor(
-                        debuff.severity as 'minor' | 'moderate' | 'severe'
-                      )}`}
-                    >
-                      <Shield className="h-4 w-4" />
-                      <div>
-                        <div className="font-medium">{debuff.name}</div>
-                        <div className="text-xs">
-                          {debuff.description} • {debuff.timeRemaining}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader>
