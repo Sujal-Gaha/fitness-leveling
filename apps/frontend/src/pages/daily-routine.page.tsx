@@ -1,5 +1,21 @@
-import { useState } from 'react';
-import { Calendar, CheckCircle2, Dumbbell, Flame, Heart, Info, Leaf, MoveHorizontal, Repeat, Zap } from 'lucide-react';
+import {
+  AlertTriangle,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Dumbbell,
+  Flame,
+  Heart,
+  Info,
+  Leaf,
+  MoveHorizontal,
+  Repeat,
+  Shield,
+  Skull,
+  Zap,
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { PenaltySystem } from '../components/user-penaltiy-system';
 import {
   Badge,
   Button,
@@ -22,6 +38,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@libs/components';
+import { PenaltyHistory } from '../components/user-penalty-history';
 
 type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
 
@@ -29,6 +46,8 @@ type ScheduleDay = {
   date: Date;
   type: WorkoutType;
   completed: boolean;
+  failed: boolean;
+  timeRemaining?: number;
   exercises: Exercise[];
 };
 
@@ -49,14 +68,33 @@ type Stretch = {
   targetArea: string;
 };
 
+type Penalty = {
+  id: number;
+  date: Date;
+  description: string;
+  severity: 'minor' | 'moderate' | 'severe';
+  consequence: string;
+  resolved: boolean;
+};
+
 export const DailyRoutinePage = () => {
   const today = new Date();
+
+  const [showPenaltyWarning, setShowPenaltyWarning] = useState(false);
+
+  useEffect(() => {
+    if (Math.random() > 0.5) {
+      setShowPenaltyWarning(true);
+    }
+  }, []);
 
   const [schedule, setSchedule] = useState<ScheduleDay[]>([
     {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
       type: 'push',
       completed: false,
+      failed: false,
+      timeRemaining: 14, // 14 hours remaining
       exercises: [
         { id: 1, name: 'Push-ups (3 sets of 15)', completed: false, sets: 3, reps: '15', xp: 50 },
         { id: 2, name: 'Shoulder Press (3 sets of 12)', completed: false, sets: 3, reps: '12', xp: 50 },
@@ -69,6 +107,8 @@ export const DailyRoutinePage = () => {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
       type: 'pull',
       completed: false,
+      failed: false,
+      timeRemaining: 38, // 38 hours remaining
       exercises: [
         { id: 6, name: 'Pull-ups (3 sets of 8)', completed: false, sets: 3, reps: '8', xp: 60 },
         { id: 7, name: 'Bent-over Rows (3 sets of 12)', completed: false, sets: 3, reps: '12', xp: 50 },
@@ -81,6 +121,8 @@ export const DailyRoutinePage = () => {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2),
       type: 'legs',
       completed: false,
+      failed: false,
+      timeRemaining: 62, // 62 hours remaining
       exercises: [
         { id: 11, name: 'Squats (3 sets of 15)', completed: false, sets: 3, reps: '15', xp: 60 },
         { id: 12, name: 'Lunges (3 sets of 12 each leg)', completed: false, sets: 3, reps: '12 each leg', xp: 50 },
@@ -93,6 +135,8 @@ export const DailyRoutinePage = () => {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3),
       type: 'rest',
       completed: false,
+      failed: false,
+      timeRemaining: 86, // 86 hours remaining
       exercises: [
         { id: 16, name: 'Light Walking (20 minutes)', completed: false, duration: '20 min', xp: 30 },
         { id: 17, name: 'Full Body Stretching', completed: false, duration: '15 min', xp: 20 },
@@ -102,6 +146,8 @@ export const DailyRoutinePage = () => {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 4),
       type: 'push',
       completed: false,
+      failed: false,
+      timeRemaining: 110, // 110 hours remaining
       exercises: [
         { id: 18, name: 'Incline Push-ups (3 sets of 15)', completed: false, sets: 3, reps: '15', xp: 50 },
         { id: 19, name: 'Overhead Press (3 sets of 12)', completed: false, sets: 3, reps: '12', xp: 50 },
@@ -114,6 +160,8 @@ export const DailyRoutinePage = () => {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5),
       type: 'pull',
       completed: false,
+      failed: false,
+      timeRemaining: 134, // 134 hours remaining
       exercises: [
         { id: 23, name: 'Assisted Pull-ups (3 sets of 10)', completed: false, sets: 3, reps: '10', xp: 50 },
         { id: 24, name: 'Single-Arm Rows (3 sets of 12 each)', completed: false, sets: 3, reps: '12 each', xp: 50 },
@@ -126,12 +174,44 @@ export const DailyRoutinePage = () => {
       date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 6),
       type: 'rest',
       completed: false,
+      failed: false,
+      timeRemaining: 158, // 158 hours remaining
       exercises: [
         { id: 28, name: 'Yoga Session', completed: false, duration: '30 min', xp: 40 },
         { id: 29, name: 'Foam Rolling', completed: false, duration: '15 min', xp: 20 },
       ],
     },
   ]);
+
+  const [penalties, setPenalties] = useState<Penalty[]>([
+    {
+      id: 1,
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7),
+      description: 'Failed to complete Push Day workout',
+      severity: 'minor',
+      consequence: "Lost 100 XP and received 'Muscle Fatigue' debuff (-10% strength) for 24 hours",
+      resolved: true,
+    },
+    {
+      id: 2,
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 3),
+      description: 'Missed two consecutive workouts',
+      severity: 'moderate',
+      consequence: "Lost 250 XP and received 'Weakened' debuff (-15% to all stats) for 48 hours",
+      resolved: false,
+    },
+  ]);
+
+  const [activeDebuffs, setActiveDebuffs] = useState([
+    {
+      name: 'Weakened',
+      description: '-15% to all stats',
+      timeRemaining: '23 hours',
+      severity: 'moderate',
+    },
+  ]);
+
+  const [dangerMeter, setDangerMeter] = useState(35);
 
   const stretchingSuggestions: Record<WorkoutType, Stretch[]> = {
     push: [
@@ -293,6 +373,24 @@ export const DailyRoutinePage = () => {
     );
   };
 
+  const markWorkoutAsFailed = (dayIndex: number) => {
+    setSchedule((prev) => prev.map((day, idx) => (idx === dayIndex ? { ...day, failed: true } : day)));
+
+    const failedDay = schedule[dayIndex];
+    const newPenalty: Penalty = {
+      id: penalties.length + 1,
+      date: new Date(),
+      description: `Failed to complete ${getWorkoutTypeLabel(failedDay.type)} workout`,
+      severity: 'minor',
+      consequence: "Lost 100 XP and received 'Muscle Fatigue' debuff (-10% strength) for 24 hours",
+      resolved: false,
+    };
+
+    setPenalties([...penalties, newPenalty]);
+
+    setDangerMeter((prev) => Math.min(prev + 15, 100));
+  };
+
   const calculateDayProgress = (day: ScheduleDay) => {
     const completedCount = day.exercises.filter((ex) => ex.completed).length;
     const totalCount = day.exercises.length;
@@ -307,6 +405,16 @@ export const DailyRoutinePage = () => {
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
+
+  const formatTimeRemaining = (hours: number) => {
+    if (hours < 1) {
+      return `${Math.round(hours * 60)} minutes`;
+    }
+    if (hours < 24) {
+      return `${Math.floor(hours)} hours`;
+    }
+    return `${Math.floor(hours / 24)} days`;
   };
 
   const getWorkoutTypeIcon = (type: WorkoutType) => {
@@ -333,21 +441,21 @@ export const DailyRoutinePage = () => {
   const getWorkoutTypeColor = (type: WorkoutType) => {
     switch (type) {
       case 'push':
-        return 'bg-blue-100 text-blue-800 border-blue-300';
+        return 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700';
       case 'pull':
-        return 'bg-purple-100 text-purple-800 border-purple-300';
+        return 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700';
       case 'legs':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700';
       case 'cardio':
-        return 'bg-red-100 text-red-800 border-red-300';
+        return 'bg-red-100 text-red-800 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700';
       case 'rest':
-        return 'bg-green-100 text-green-800 border-green-300';
+        return 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700';
       case 'full-body':
-        return 'bg-indigo-100 text-indigo-800 border-indigo-300';
+        return 'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-700';
       case 'mobility':
-        return 'bg-pink-100 text-pink-800 border-pink-300';
+        return 'bg-pink-100 text-pink-800 border-pink-300 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-700';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300';
+        return 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700';
     }
   };
 
@@ -379,6 +487,26 @@ export const DailyRoutinePage = () => {
       day.date.getFullYear() === today.getFullYear()
   );
 
+  const getDangerMeterColor = () => {
+    if (dangerMeter < 30) return 'bg-green-500';
+    if (dangerMeter < 60) return 'bg-yellow-500';
+    if (dangerMeter < 80) return 'bg-orange-500';
+    return 'bg-red-500';
+  };
+
+  const getSeverityColor = (severity: 'minor' | 'moderate' | 'severe') => {
+    switch (severity) {
+      case 'minor':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700';
+      case 'moderate':
+        return 'bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-700';
+      case 'severe':
+        return 'bg-red-100 text-red-800 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700';
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -386,7 +514,67 @@ export const DailyRoutinePage = () => {
         <p className="text-muted-foreground">Track your workouts and follow your training split</p>
       </div>
 
-      {/* Weekly Schedule Overview */}
+      {showPenaltyWarning && <PenaltySystem onClose={() => setShowPenaltyWarning(false)} />}
+      <Card className="border-2 border-gray-300 dark:border-gray-700 bg-black/5 dark:bg-white/5">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center text-xl">
+              <Skull className="h-5 w-5 mr-2 text-red-500" />
+              Hunter Rank System
+            </CardTitle>
+            <Badge variant="outline" className="bg-black/10 dark:bg-white/10 font-mono">
+              RANK E
+            </Badge>
+          </div>
+          <CardDescription>Complete workouts on time to avoid penalties and increase your rank</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="font-medium">Danger Meter</span>
+                <span className="font-mono">{dangerMeter}%</span>
+              </div>
+              <div className="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${getDangerMeterColor()} transition-all duration-500`}
+                  style={{ width: `${dangerMeter}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>Safe</span>
+                <span>Warning</span>
+                <span>Danger</span>
+              </div>
+            </div>
+
+            {activeDebuffs.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Active Debuffs</h4>
+                <div className="flex flex-wrap gap-2">
+                  {activeDebuffs.map((debuff, index) => (
+                    <div
+                      key={index}
+                      className={`px-3 py-1.5 rounded-md text-sm flex items-center gap-2 ${getSeverityColor(
+                        debuff.severity as 'minor' | 'moderate' | 'severe'
+                      )}`}
+                    >
+                      <Shield className="h-4 w-4" />
+                      <div>
+                        <div className="font-medium">{debuff.name}</div>
+                        <div className="text-xs">
+                          {debuff.description} • {debuff.timeRemaining}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center">
@@ -407,10 +595,16 @@ export const DailyRoutinePage = () => {
                 <div
                   key={index}
                   className={cn(
-                    'flex-shrink-0 w-[130px] rounded-lg border p-3 flex flex-col items-center',
-                    isToday ? 'border-primary bg-primary/5' : 'border-border'
+                    'flex-shrink-0 w-[130px] rounded-lg border p-3 flex flex-col items-center relative',
+                    isToday ? 'border-primary bg-primary/5' : 'border-border',
+                    day.failed && 'border-red-500 bg-red-500/5'
                   )}
                 >
+                  {day.failed && (
+                    <Badge variant="destructive" className="absolute -top-2 -right-2">
+                      Failed
+                    </Badge>
+                  )}
                   <div className="text-sm font-medium mb-1">{formatDate(day.date)}</div>
                   <Badge
                     variant="outline"
@@ -425,6 +619,12 @@ export const DailyRoutinePage = () => {
                     </div>
                     <Progress value={calculateDayProgress(day).percentage} className="h-1" />
                   </div>
+                  {day.timeRemaining !== undefined && day.timeRemaining < 24 && !day.completed && !day.failed && (
+                    <div className="mt-2 flex items-center text-xs text-amber-600 dark:text-amber-400">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {formatTimeRemaining(day.timeRemaining)} left
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -432,17 +632,22 @@ export const DailyRoutinePage = () => {
         </CardContent>
       </Card>
 
-      {/* Today's Workout */}
       <Tabs defaultValue="today" className="space-y-4">
         <TabsList>
           <TabsTrigger value="today">Today's Workout</TabsTrigger>
           <TabsTrigger value="upcoming">Upcoming Workouts</TabsTrigger>
           <TabsTrigger value="stretches">Stretching Guide</TabsTrigger>
+          <TabsTrigger value="penalties">Penalty History</TabsTrigger>
         </TabsList>
 
         <TabsContent value="today">
           {todayWorkout && (
-            <Card>
+            <Card
+              className={cn(
+                todayWorkout.failed ? 'border-red-500' : '',
+                todayWorkout.timeRemaining && todayWorkout.timeRemaining < 6 ? 'border-amber-500' : ''
+              )}
+            >
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
@@ -462,6 +667,31 @@ export const DailyRoutinePage = () => {
                     </div>
                   </div>
                 </div>
+
+                {todayWorkout.timeRemaining !== undefined && !todayWorkout.completed && !todayWorkout.failed && (
+                  <div
+                    className={cn(
+                      'mt-2 flex items-center justify-between rounded-md px-3 py-2',
+                      todayWorkout.timeRemaining < 6
+                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                        : todayWorkout.timeRemaining < 12
+                        ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
+                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                    )}
+                  >
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 mr-2" />
+                      <span className="font-medium">Time Remaining:</span>
+                      <span className="ml-2">{formatTimeRemaining(todayWorkout.timeRemaining)}</span>
+                    </div>
+                    {todayWorkout.timeRemaining < 6 && (
+                      <div className="flex items-center">
+                        <AlertTriangle className="h-4 w-4 mr-1" />
+                        <span className="text-sm font-medium">Warning: Penalty Risk</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </CardHeader>
               <CardContent>
                 <div className="mb-4 space-y-2">
@@ -482,12 +712,13 @@ export const DailyRoutinePage = () => {
                         id={`exercise-${exercise.id}`}
                         checked={exercise.completed}
                         onCheckedChange={() => toggleExercise(todayIndex, exercise.id)}
+                        disabled={todayWorkout.failed}
                       />
                       <label
                         htmlFor={`exercise-${exercise.id}`}
                         className={`flex flex-1 items-center justify-between cursor-pointer ${
                           exercise.completed ? 'line-through text-muted-foreground' : ''
-                        }`}
+                        } ${todayWorkout.failed ? 'opacity-50' : ''}`}
                       >
                         <span>{exercise.name}</span>
                         <span className="text-sm font-medium">+{exercise.xp} XP</span>
@@ -496,7 +727,6 @@ export const DailyRoutinePage = () => {
                   ))}
                 </div>
 
-                {/* Stretching suggestions for today */}
                 <div className="mt-6 pt-4 border-t">
                   <h3 className="text-sm font-medium flex items-center mb-2">
                     <Heart className="h-4 w-4 mr-1 text-red-500" />
@@ -515,28 +745,43 @@ export const DailyRoutinePage = () => {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  disabled={
-                    calculateDayProgress(todayWorkout).completedCount !== calculateDayProgress(todayWorkout).totalCount
-                  }
-                  variant={
-                    calculateDayProgress(todayWorkout).completedCount === calculateDayProgress(todayWorkout).totalCount
-                      ? 'default'
-                      : 'outline'
-                  }
-                >
-                  {calculateDayProgress(todayWorkout).completedCount ===
-                  calculateDayProgress(todayWorkout).totalCount ? (
-                    <>
-                      <CheckCircle2 className="mr-2 h-4 w-4" />
-                      Complete Workout & Claim {calculateDayProgress(todayWorkout).totalXP} XP
-                    </>
-                  ) : (
-                    'Complete all exercises to finish workout'
-                  )}
-                </Button>
+              <CardFooter className="flex flex-col sm:flex-row gap-2">
+                {!todayWorkout.failed && (
+                  <Button
+                    className="w-full sm:flex-1"
+                    disabled={
+                      calculateDayProgress(todayWorkout).completedCount !==
+                      calculateDayProgress(todayWorkout).totalCount
+                    }
+                    variant={
+                      calculateDayProgress(todayWorkout).completedCount ===
+                      calculateDayProgress(todayWorkout).totalCount
+                        ? 'default'
+                        : 'outline'
+                    }
+                  >
+                    {calculateDayProgress(todayWorkout).completedCount ===
+                    calculateDayProgress(todayWorkout).totalCount ? (
+                      <>
+                        <CheckCircle2 className="mr-2 h-4 w-4" />
+                        Complete Workout & Claim {calculateDayProgress(todayWorkout).totalXP} XP
+                      </>
+                    ) : (
+                      'Complete all exercises to finish workout'
+                    )}
+                  </Button>
+                )}
+
+                {!todayWorkout.completed && !todayWorkout.failed && (
+                  <Button
+                    variant="destructive"
+                    className="w-full sm:w-auto"
+                    onClick={() => markWorkoutAsFailed(todayIndex)}
+                  >
+                    <Skull className="mr-2 h-4 w-4" />
+                    Mark as Failed
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           )}
@@ -583,6 +828,13 @@ export const DailyRoutinePage = () => {
                               </div>
                             ))}
                           </div>
+
+                          {day.timeRemaining !== undefined && (
+                            <div className="mt-3 flex items-center text-xs text-muted-foreground">
+                              <Clock className="h-3.5 w-3.5 mr-1" />
+                              Due in {formatTimeRemaining(day.timeRemaining)}
+                            </div>
+                          )}
                         </CardContent>
                       </Card>
                     ))}
@@ -686,6 +938,10 @@ export const DailyRoutinePage = () => {
               </Tabs>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="penalties">
+          <PenaltyHistory penalties={penalties} />
         </TabsContent>
       </Tabs>
 
