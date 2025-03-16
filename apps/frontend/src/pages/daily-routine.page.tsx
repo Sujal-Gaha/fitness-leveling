@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { PenaltySystem } from '../components/user-penaltiy-system';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@libs/components';
 import { PenaltyHistory } from '../components/user-penalty-history';
@@ -43,6 +43,12 @@ type Penalty = {
   severity: 'minor' | 'moderate' | 'severe';
   consequence: string;
   resolved: boolean;
+};
+
+type TabItem = {
+  label: string;
+  value: string;
+  Component: ReactNode;
 };
 
 export const DailyRoutinePage = () => {
@@ -308,6 +314,21 @@ export const DailyRoutinePage = () => {
     ],
   };
 
+  const tabItems: TabItem[] = [
+    {
+      label: "Today's Workout",
+      value: 'today',
+      Component: <TodaysWorkoutModule schedule={schedule} setSchedule={setSchedule} />,
+    },
+    { label: 'Upcoming Workouts', value: 'upcoming', Component: <UpcomingWorkoutsModule schedule={schedule} /> },
+    {
+      label: 'Stretching Guide',
+      value: 'stretches',
+      Component: <StretchingGuideModule stretchingSuggestions={stretchingSuggestions} />,
+    },
+    { label: 'Penalty History', value: 'penalties', Component: <PenaltyHistory penalties={penalties} /> },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
@@ -321,27 +342,18 @@ export const DailyRoutinePage = () => {
 
       <Tabs defaultValue="today" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="today">Today's Workout</TabsTrigger>
-          <TabsTrigger value="upcoming">Upcoming Workouts</TabsTrigger>
-          <TabsTrigger value="stretches">Stretching Guide</TabsTrigger>
-          <TabsTrigger value="penalties">Penalty History</TabsTrigger>
+          {tabItems.map((item) => (
+            <TabsTrigger key={item.value} value={item.value}>
+              {item.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <TabsContent value="today">
-          <TodaysWorkoutModule schedule={schedule} setSchedule={setSchedule} />
-        </TabsContent>
-
-        <TabsContent value="upcoming">
-          <UpcomingWorkoutsModule schedule={schedule} />
-        </TabsContent>
-
-        <TabsContent value="stretches">
-          <StretchingGuideModule stretchingSuggestions={stretchingSuggestions} />
-        </TabsContent>
-
-        <TabsContent value="penalties">
-          <PenaltyHistory penalties={penalties} />
-        </TabsContent>
+        {tabItems.map((item) => (
+          <TabsContent key={item.value} value={item.value}>
+            {item.Component}
+          </TabsContent>
+        ))}
       </Tabs>
 
       <NextRestDayModule schedule={schedule} />
