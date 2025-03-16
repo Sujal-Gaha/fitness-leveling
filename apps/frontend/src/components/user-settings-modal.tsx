@@ -24,7 +24,6 @@ export const UserSettingsModal = () => {
     <Dialog open={isUserSettingsModalOpen} onOpenChange={setUserSettingsModalOpen}>
       <DialogContent className="sm:max-w-[900px] p-0 gap-0 overflow-hidden">
         <div className="flex h-[600px]">
-          {/* Left sidebar */}
           <div className="w-64 bg-muted/30 border-r border-border overflow-y-auto">
             <div className="p-4">
               <DialogTitle className="mb-6">Options</DialogTitle>

@@ -10,7 +10,6 @@ import {
   Leaf,
   MoveHorizontal,
   Repeat,
-  Shield,
   Skull,
   Zap,
 } from 'lucide-react';
@@ -39,6 +38,8 @@ import {
   TooltipTrigger,
 } from '@libs/components';
 import { PenaltyHistory } from '../components/user-penalty-history';
+import { format } from 'date-fns';
+import { NextRestDayModule } from '../modules/user/next-rest-day.module';
 
 type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
 
@@ -202,17 +203,6 @@ export const DailyRoutinePage = () => {
     },
   ]);
 
-  const [activeDebuffs, setActiveDebuffs] = useState([
-    {
-      name: 'Weakened',
-      description: '-15% to all stats',
-      timeRemaining: '23 hours',
-      severity: 'moderate',
-    },
-  ]);
-
-  const [dangerMeter, setDangerMeter] = useState(35);
-
   const stretchingSuggestions: Record<WorkoutType, Stretch[]> = {
     push: [
       {
@@ -358,8 +348,6 @@ export const DailyRoutinePage = () => {
       day.date.getFullYear() === today.getFullYear()
   );
 
-  const nextRestDay = schedule.find((day) => day.type === 'rest' && day.date > today);
-
   const toggleExercise = (dayIndex: number, exerciseId: number) => {
     setSchedule((prev) =>
       prev.map((day, idx) =>
@@ -387,8 +375,6 @@ export const DailyRoutinePage = () => {
     };
 
     setPenalties([...penalties, newPenalty]);
-
-    setDangerMeter((prev) => Math.min(prev + 15, 100));
   };
 
   const calculateDayProgress = (day: ScheduleDay) => {
@@ -401,10 +387,6 @@ export const DailyRoutinePage = () => {
       totalXP: day.exercises.reduce((sum, ex) => sum + ex.xp, 0),
       earnedXP: day.exercises.filter((ex) => ex.completed).reduce((sum, ex) => sum + ex.xp, 0),
     };
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   };
 
   const formatTimeRemaining = (hours: number) => {
@@ -526,7 +508,7 @@ export const DailyRoutinePage = () => {
                       Failed
                     </Badge>
                   )}
-                  <div className="text-sm font-medium mb-1">{formatDate(day.date)}</div>
+                  <div className="text-sm font-medium mb-1">{format(day.date, 'EEE, MMM d')}</div>
                   <Badge
                     variant="outline"
                     className={cn('flex items-center gap-1 mb-2', getWorkoutTypeColor(day.type))}
@@ -578,7 +560,7 @@ export const DailyRoutinePage = () => {
                     </CardTitle>
                     <CardDescription className="flex items-center mt-1">
                       <Calendar className="mr-1 h-4 w-4" />
-                      {formatDate(todayWorkout.date)}
+                      {format(todayWorkout.date, 'EEE, MMM d')}
                     </CardDescription>
                   </div>
                   <div className="text-right">
@@ -729,7 +711,7 @@ export const DailyRoutinePage = () => {
                                 {getWorkoutTypeIcon(day.type)}
                                 <span className="ml-2">{getWorkoutTypeLabel(day.type)}</span>
                               </CardTitle>
-                              <CardDescription>{formatDate(day.date)}</CardDescription>
+                              <CardDescription>{format(day.date, 'EEE, MMM d')}</CardDescription>
                             </div>
                             <Badge variant="outline" className="bg-primary/10 text-primary">
                               +{calculateDayProgress(day).totalXP} XP
@@ -866,57 +848,7 @@ export const DailyRoutinePage = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Next Rest Day Card */}
-      {nextRestDay && (
-        <Card className="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center text-green-800 dark:text-green-300">
-              <Leaf className="h-5 w-5 mr-2 text-green-600 dark:text-green-400" />
-              Next Rest Day
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-800 dark:text-green-300">
-                  Your next scheduled rest day is on <span className="font-medium">{formatDate(nextRestDay.date)}</span>
-                </p>
-                <p className="text-sm text-green-700/80 dark:text-green-400/80 mt-1">
-                  Remember that recovery is just as important as training!
-                </p>
-              </div>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" className="border-green-300 dark:border-green-700">
-                      <Info className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">
-                    <p>
-                      Rest days allow your muscles to recover and grow stronger. Light activity like walking,
-                      stretching, or yoga is encouraged.
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {nextRestDay.exercises.map((activity, index) => (
-                <div
-                  key={index}
-                  className="text-sm p-2 rounded-md bg-green-100/70 dark:bg-green-800/30 text-green-800 dark:text-green-300"
-                >
-                  <div className="font-medium">{activity.name}</div>
-                  <div className="text-xs text-green-700/80 dark:text-green-400/80">
-                    {activity.duration} • +{activity.xp} XP
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <NextRestDayModule schedule={schedule} />
     </div>
   );
 };
