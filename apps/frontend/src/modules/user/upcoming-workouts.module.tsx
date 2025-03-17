@@ -1,81 +1,7 @@
-import { Clock, Dumbbell, Flame, Heart, Leaf, MoveHorizontal, Repeat, Zap } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle, ScrollArea } from '@libs/components';
 import { format } from 'date-fns';
-
-type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
-
-type ScheduleDay = {
-  date: Date;
-  type: WorkoutType;
-  completed: boolean;
-  failed: boolean;
-  timeRemaining?: number;
-  exercises: Exercise[];
-};
-
-type Exercise = {
-  id: number;
-  name: string;
-  completed: boolean;
-  sets?: number;
-  reps?: string;
-  duration?: string;
-  xp: number;
-};
-
-export const getWorkoutTypeIcon = (type: WorkoutType) => {
-  switch (type) {
-    case 'push':
-      return <Dumbbell className="h-5 w-5 text-blue-500" />;
-    case 'pull':
-      return <MoveHorizontal className="h-5 w-5 text-purple-500" />;
-    case 'legs':
-      return <Zap className="h-5 w-5 text-yellow-500" />;
-    case 'cardio':
-      return <Flame className="h-5 w-5 text-red-500" />;
-    case 'rest':
-      return <Leaf className="h-5 w-5 text-green-500" />;
-    case 'full-body':
-      return <Repeat className="h-5 w-5 text-indigo-500" />;
-    case 'mobility':
-      return <Heart className="h-5 w-5 text-pink-500" />;
-    default:
-      return <Dumbbell className="h-5 w-5" />;
-  }
-};
-
-const getWorkoutTypeLabel = (type: WorkoutType) => {
-  switch (type) {
-    case 'push':
-      return 'Push Day';
-    case 'pull':
-      return 'Pull Day';
-    case 'legs':
-      return 'Leg Day';
-    case 'cardio':
-      return 'Cardio Day';
-    case 'rest':
-      return 'Rest Day';
-    case 'full-body':
-      return 'Full Body';
-    case 'mobility':
-      return 'Mobility';
-    default:
-      return type;
-  }
-};
-
-const calculateDayProgress = (day: ScheduleDay) => {
-  const completedCount = day.exercises.filter((ex) => ex.completed).length;
-  const totalCount = day.exercises.length;
-  return {
-    completedCount,
-    totalCount,
-    percentage: totalCount > 0 ? (completedCount / totalCount) * 100 : 0,
-    totalXP: day.exercises.reduce((sum, ex) => sum + ex.xp, 0),
-    earnedXP: day.exercises.filter((ex) => ex.completed).reduce((sum, ex) => sum + ex.xp, 0),
-  };
-};
+import { DailyRoutine, ScheduleDay } from '../../utils/DailyRoutine';
 
 const formatTimeRemaining = (hours: number) => {
   if (hours < 1) {
@@ -88,14 +14,12 @@ const formatTimeRemaining = (hours: number) => {
 };
 
 export const UpcomingWorkoutsModule = ({ schedule }: { schedule: ScheduleDay[] }) => {
-  const today = new Date();
+  const dailyRoutine = new DailyRoutine(schedule);
 
-  const todayIndex = schedule.findIndex(
-    (day) =>
-      day.date.getDate() === today.getDate() &&
-      day.date.getMonth() === today.getMonth() &&
-      day.date.getFullYear() === today.getFullYear()
-  );
+  const { todayIndex } = dailyRoutine.getTodayIndex();
+  const calculateDayProgress = dailyRoutine.calculateDayProgress;
+  const getWorkoutTypeIcon = dailyRoutine.getWorkoutTypeIcon;
+  const getWorkoutTypeLabel = dailyRoutine.getWorkoutTypeLabel;
 
   return (
     <Card>

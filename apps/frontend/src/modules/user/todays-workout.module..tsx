@@ -11,20 +11,9 @@ import {
   Progress,
 } from '@libs/components';
 import { format } from 'date-fns';
-import {
-  AlertTriangle,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Dumbbell,
-  Flame,
-  Heart,
-  Leaf,
-  MoveHorizontal,
-  Repeat,
-  Zap,
-} from 'lucide-react';
+import { AlertTriangle, Calendar, CheckCircle2, Clock, Heart } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
+import { DailyRoutine, ScheduleDay, WorkoutType } from '../../utils/DailyRoutine';
 
 type Stretch = {
   name: string;
@@ -171,27 +160,6 @@ const stretchingSuggestions: Record<WorkoutType, Stretch[]> = {
   ],
 };
 
-type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
-
-type ScheduleDay = {
-  date: Date;
-  type: WorkoutType;
-  completed: boolean;
-  failed: boolean;
-  timeRemaining?: number;
-  exercises: Exercise[];
-};
-
-type Exercise = {
-  id: number;
-  name: string;
-  completed: boolean;
-  sets?: number;
-  reps?: string;
-  duration?: string;
-  xp: number;
-};
-
 export const TodaysWorkoutModule = ({
   schedule,
   setSchedule,
@@ -199,20 +167,13 @@ export const TodaysWorkoutModule = ({
   schedule: ScheduleDay[];
   setSchedule: Dispatch<SetStateAction<ScheduleDay[]>>;
 }) => {
-  const today = new Date();
-  const todayIndex = schedule.findIndex(
-    (day) =>
-      day.date.getDate() === today.getDate() &&
-      day.date.getMonth() === today.getMonth() &&
-      day.date.getFullYear() === today.getFullYear()
-  );
+  const dailyRoutine = new DailyRoutine(schedule);
 
-  const todayWorkout = schedule.find(
-    (day) =>
-      day.date.getDate() === today.getDate() &&
-      day.date.getMonth() === today.getMonth() &&
-      day.date.getFullYear() === today.getFullYear()
-  );
+  const { todayIndex } = dailyRoutine.getTodayIndex();
+  const { todayWorkout } = dailyRoutine.getTodayWorkout();
+  const calculateDayProgress = dailyRoutine.calculateDayProgress;
+  const getWorkoutTypeIcon = dailyRoutine.getWorkoutTypeIcon;
+  const getWorkoutTypeLabel = dailyRoutine.getWorkoutTypeLabel;
 
   const toggleExercise = (dayIndex: number, exerciseId: number) => {
     setSchedule((prev) =>
@@ -227,18 +188,6 @@ export const TodaysWorkoutModule = ({
     );
   };
 
-  const calculateDayProgress = (day: ScheduleDay) => {
-    const completedCount = day.exercises.filter((ex) => ex.completed).length;
-    const totalCount = day.exercises.length;
-    return {
-      completedCount,
-      totalCount,
-      percentage: totalCount > 0 ? (completedCount / totalCount) * 100 : 0,
-      totalXP: day.exercises.reduce((sum, ex) => sum + ex.xp, 0),
-      earnedXP: day.exercises.filter((ex) => ex.completed).reduce((sum, ex) => sum + ex.xp, 0),
-    };
-  };
-
   const formatTimeRemaining = (hours: number) => {
     if (hours < 1) {
       return `${Math.round(hours * 60)} minutes`;
@@ -247,48 +196,6 @@ export const TodaysWorkoutModule = ({
       return `${Math.floor(hours)} hours`;
     }
     return `${Math.floor(hours / 24)} days`;
-  };
-
-  const getWorkoutTypeIcon = (type: WorkoutType) => {
-    switch (type) {
-      case 'push':
-        return <Dumbbell className="h-5 w-5 text-blue-500" />;
-      case 'pull':
-        return <MoveHorizontal className="h-5 w-5 text-purple-500" />;
-      case 'legs':
-        return <Zap className="h-5 w-5 text-yellow-500" />;
-      case 'cardio':
-        return <Flame className="h-5 w-5 text-red-500" />;
-      case 'rest':
-        return <Leaf className="h-5 w-5 text-green-500" />;
-      case 'full-body':
-        return <Repeat className="h-5 w-5 text-indigo-500" />;
-      case 'mobility':
-        return <Heart className="h-5 w-5 text-pink-500" />;
-      default:
-        return <Dumbbell className="h-5 w-5" />;
-    }
-  };
-
-  const getWorkoutTypeLabel = (type: WorkoutType) => {
-    switch (type) {
-      case 'push':
-        return 'Push Day';
-      case 'pull':
-        return 'Pull Day';
-      case 'legs':
-        return 'Leg Day';
-      case 'cardio':
-        return 'Cardio Day';
-      case 'rest':
-        return 'Rest Day';
-      case 'full-body':
-        return 'Full Body';
-      case 'mobility':
-        return 'Mobility';
-      default:
-        return type;
-    }
   };
 
   if (!todayWorkout) return null;
@@ -349,8 +256,8 @@ export const TodaysWorkoutModule = ({
         <div className="mb-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span>
-              {calculateDayProgress(todayWorkout).completedCount} of {calculateDayProgress(todayWorkout).totalCount}{' '}
-              completed
+              {dailyRoutine.calculateDayProgress(todayWorkout).completedCount} of{' '}
+              {dailyRoutine.calculateDayProgress(todayWorkout).totalCount} completed
             </span>
             <span>{Math.round(calculateDayProgress(todayWorkout).percentage)}%</span>
           </div>

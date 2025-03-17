@@ -7,43 +7,8 @@ import { UpcomingWorkoutsModule } from '../modules/user/upcoming-workouts.module
 import { TodaysWorkoutModule } from '../modules/user/todays-workout.module.';
 import { StretchingGuideModule } from '../modules/user/stretching-guide.module';
 import { WeeklyTrainingSplitModule } from '../modules/user/weekly-training-split.module';
-
-type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
-
-type ScheduleDay = {
-  date: Date;
-  type: WorkoutType;
-  completed: boolean;
-  failed: boolean;
-  timeRemaining?: number;
-  exercises: Exercise[];
-};
-
-type Exercise = {
-  id: number;
-  name: string;
-  completed: boolean;
-  sets?: number;
-  reps?: string;
-  duration?: string;
-  xp: number;
-};
-
-type Stretch = {
-  name: string;
-  description: string;
-  duration: string;
-  targetArea: string;
-};
-
-type Penalty = {
-  id: number;
-  date: Date;
-  description: string;
-  severity: 'minor' | 'moderate' | 'severe';
-  consequence: string;
-  resolved: boolean;
-};
+import { ScheduleDay, Stretch, WorkoutType } from '../utils/DailyRoutine';
+import { Penalty } from '../utils/Penalty';
 
 type TabItem = {
   label: string;
@@ -324,7 +289,7 @@ export const DailyRoutinePage = () => {
     {
       label: 'Stretching Guide',
       value: 'stretches',
-      Component: <StretchingGuideModule stretchingSuggestions={stretchingSuggestions} />,
+      Component: <StretchingGuideModule stretchingSuggestions={stretchingSuggestions} schedule={schedule} />,
     },
     { label: 'Penalty History', value: 'penalties', Component: <PenaltyHistory penalties={penalties} /> },
   ];

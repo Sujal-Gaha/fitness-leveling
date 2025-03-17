@@ -9,64 +9,21 @@ import {
   TabsList,
   TabsTrigger,
 } from '@libs/components';
-import { Dumbbell, Flame, Heart, Info, Leaf, MoveHorizontal, Repeat, Zap } from 'lucide-react';
-
-type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
-
-type Stretch = {
-  name: string;
-  description: string;
-  duration: string;
-  targetArea: string;
-};
-
-const getWorkoutTypeIcon = (type: WorkoutType) => {
-  switch (type) {
-    case 'push':
-      return <Dumbbell className="h-5 w-5 text-blue-500" />;
-    case 'pull':
-      return <MoveHorizontal className="h-5 w-5 text-purple-500" />;
-    case 'legs':
-      return <Zap className="h-5 w-5 text-yellow-500" />;
-    case 'cardio':
-      return <Flame className="h-5 w-5 text-red-500" />;
-    case 'rest':
-      return <Leaf className="h-5 w-5 text-green-500" />;
-    case 'full-body':
-      return <Repeat className="h-5 w-5 text-indigo-500" />;
-    case 'mobility':
-      return <Heart className="h-5 w-5 text-pink-500" />;
-    default:
-      return <Dumbbell className="h-5 w-5" />;
-  }
-};
-
-const getWorkoutTypeLabel = (type: WorkoutType) => {
-  switch (type) {
-    case 'push':
-      return 'Push Day';
-    case 'pull':
-      return 'Pull Day';
-    case 'legs':
-      return 'Leg Day';
-    case 'cardio':
-      return 'Cardio Day';
-    case 'rest':
-      return 'Rest Day';
-    case 'full-body':
-      return 'Full Body';
-    case 'mobility':
-      return 'Mobility';
-    default:
-      return type;
-  }
-};
+import { Heart, Info } from 'lucide-react';
+import { ScheduleDay, Stretch, StretchingGuide, WorkoutType } from '../../utils/DailyRoutine';
 
 export const StretchingGuideModule = ({
   stretchingSuggestions,
+  schedule,
 }: {
   stretchingSuggestions: Record<WorkoutType, Stretch[]>;
+  schedule: ScheduleDay[];
 }) => {
+  const stretchingGuide = new StretchingGuide(schedule, stretchingSuggestions);
+
+  const getWorkoutTypeLabel = stretchingGuide.getWorkoutTypeLabel;
+  const getWorkoutTypeIcon = stretchingGuide.getWorkoutTypeIcon;
+
   return (
     <Card>
       <CardHeader>
