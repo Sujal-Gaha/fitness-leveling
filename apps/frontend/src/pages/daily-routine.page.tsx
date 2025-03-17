@@ -283,7 +283,13 @@ export const DailyRoutinePage = () => {
     {
       label: "Today's Workout",
       value: 'today',
-      Component: <TodaysWorkoutModule schedule={schedule} setSchedule={setSchedule} />,
+      Component: (
+        <TodaysWorkoutModule
+          schedule={schedule}
+          setSchedule={setSchedule}
+          stretchingSuggestions={stretchingSuggestions}
+        />
+      ),
     },
     { label: 'Upcoming Workouts', value: 'upcoming', Component: <UpcomingWorkoutsModule schedule={schedule} /> },
     {

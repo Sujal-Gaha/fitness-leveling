@@ -2,16 +2,7 @@ import { Clock } from 'lucide-react';
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle, ScrollArea } from '@libs/components';
 import { format } from 'date-fns';
 import { DailyRoutine, ScheduleDay } from '../../utils/DailyRoutine';
-
-const formatTimeRemaining = (hours: number) => {
-  if (hours < 1) {
-    return `${Math.round(hours * 60)} minutes`;
-  }
-  if (hours < 24) {
-    return `${Math.floor(hours)} hours`;
-  }
-  return `${Math.floor(hours / 24)} days`;
-};
+import { formatTimeRemaining } from '../../utils/time';
 
 export const UpcomingWorkoutsModule = ({ schedule }: { schedule: ScheduleDay[] }) => {
   const dailyRoutine = new DailyRoutine(schedule);

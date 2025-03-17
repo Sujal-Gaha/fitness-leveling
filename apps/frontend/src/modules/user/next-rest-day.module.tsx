@@ -11,32 +11,13 @@ import {
   TooltipTrigger,
 } from '@libs/components';
 import { format } from 'date-fns';
-
-type WorkoutType = 'push' | 'pull' | 'legs' | 'cardio' | 'rest' | 'full-body' | 'mobility';
-
-type ScheduleDay = {
-  date: Date;
-  type: WorkoutType;
-  completed: boolean;
-  failed: boolean;
-  timeRemaining?: number;
-  exercises: Exercise[];
-};
-
-type Exercise = {
-  id: number;
-  name: string;
-  completed: boolean;
-  sets?: number;
-  reps?: string;
-  duration?: string;
-  xp: number;
-};
+import { DailyRoutine, ScheduleDay } from '../../utils/DailyRoutine';
 
 export const NextRestDayModule = ({ schedule }: { schedule: ScheduleDay[] }) => {
-  const today = new Date();
+  const dailyRoutine = new DailyRoutine(schedule);
 
-  const nextRestDay = schedule.find((day) => day.type === 'rest' && day.date > today);
+  const { nextRestDay } = dailyRoutine.getNextRestDay();
+
   if (!nextRestDay) return null;
 
   return (

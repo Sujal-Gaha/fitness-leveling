@@ -13,159 +13,17 @@ import {
 import { format } from 'date-fns';
 import { AlertTriangle, Calendar, CheckCircle2, Clock, Heart } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
-import { DailyRoutine, ScheduleDay, WorkoutType } from '../../utils/DailyRoutine';
-
-type Stretch = {
-  name: string;
-  description: string;
-  duration: string;
-  targetArea: string;
-};
-
-const stretchingSuggestions: Record<WorkoutType, Stretch[]> = {
-  push: [
-    {
-      name: 'Chest Stretch',
-      description: 'Extend arm against wall and rotate away',
-      duration: '30 sec each side',
-      targetArea: 'Chest',
-    },
-    {
-      name: 'Tricep Stretch',
-      description: 'Reach arm overhead and pull elbow',
-      duration: '30 sec each arm',
-      targetArea: 'Triceps',
-    },
-    {
-      name: 'Shoulder Stretch',
-      description: 'Pull arm across chest',
-      duration: '30 sec each arm',
-      targetArea: 'Shoulders',
-    },
-  ],
-  pull: [
-    {
-      name: 'Lat Stretch',
-      description: 'Side bend with arm overhead',
-      duration: '30 sec each side',
-      targetArea: 'Lats',
-    },
-    {
-      name: 'Bicep Stretch',
-      description: 'Extend arm with palm up',
-      duration: '30 sec each arm',
-      targetArea: 'Biceps',
-    },
-    {
-      name: 'Upper Back Stretch',
-      description: 'Clasp hands forward and round upper back',
-      duration: '30 seconds',
-      targetArea: 'Upper back',
-    },
-  ],
-  legs: [
-    {
-      name: 'Quad Stretch',
-      description: 'Pull foot to buttocks while standing',
-      duration: '30 sec each leg',
-      targetArea: 'Quadriceps',
-    },
-    {
-      name: 'Hamstring Stretch',
-      description: 'Bend forward at hips with straight legs',
-      duration: '30 seconds',
-      targetArea: 'Hamstrings',
-    },
-    {
-      name: 'Calf Stretch',
-      description: 'Step back with straight leg',
-      duration: '30 sec each leg',
-      targetArea: 'Calves',
-    },
-  ],
-  cardio: [
-    {
-      name: 'Hip Flexor Stretch',
-      description: 'Lunge forward and push hips forward',
-      duration: '30 sec each side',
-      targetArea: 'Hip flexors',
-    },
-    {
-      name: 'Calf Stretch',
-      description: 'Step back with straight leg',
-      duration: '30 sec each leg',
-      targetArea: 'Calves',
-    },
-    {
-      name: 'Quad Stretch',
-      description: 'Pull foot to buttocks while standing',
-      duration: '30 sec each leg',
-      targetArea: 'Quadriceps',
-    },
-  ],
-  rest: [
-    {
-      name: 'Full Body Stretch',
-      description: 'Gentle full body stretching routine',
-      duration: '10-15 minutes',
-      targetArea: 'Full body',
-    },
-    {
-      name: 'Foam Rolling',
-      description: 'Roll major muscle groups',
-      duration: '10 minutes',
-      targetArea: 'Full body',
-    },
-    { name: 'Yoga Flow', description: 'Gentle yoga sequence', duration: '20 minutes', targetArea: 'Full body' },
-  ],
-  'full-body': [
-    {
-      name: "World's Greatest Stretch",
-      description: 'Lunge with rotation and reach',
-      duration: '30 sec each side',
-      targetArea: 'Full body',
-    },
-    {
-      name: "Child's Pose",
-      description: 'Kneel and reach forward',
-      duration: '30 seconds',
-      targetArea: 'Back, shoulders',
-    },
-    {
-      name: 'Standing Forward Fold',
-      description: 'Bend at hips with soft knees',
-      duration: '30 seconds',
-      targetArea: 'Hamstrings, back',
-    },
-  ],
-  mobility: [
-    {
-      name: 'Hip Circles',
-      description: 'Circular motion with hips',
-      duration: '30 sec each direction',
-      targetArea: 'Hips',
-    },
-    {
-      name: 'Shoulder Rolls',
-      description: 'Roll shoulders forward and backward',
-      duration: '30 sec each direction',
-      targetArea: 'Shoulders',
-    },
-    {
-      name: 'Ankle Rotations',
-      description: 'Rotate ankles in circles',
-      duration: '30 sec each ankle',
-      targetArea: 'Ankles',
-    },
-  ],
-};
+import { DailyRoutine, ScheduleDay, Stretch, WorkoutType } from '../../utils/DailyRoutine';
+import { formatTimeRemaining } from '../../utils/time';
 
 export const TodaysWorkoutModule = ({
   schedule,
   setSchedule,
+  stretchingSuggestions,
 }: {
   schedule: ScheduleDay[];
   setSchedule: Dispatch<SetStateAction<ScheduleDay[]>>;
+  stretchingSuggestions: Record<WorkoutType, Stretch[]>;
 }) => {
   const dailyRoutine = new DailyRoutine(schedule);
 
@@ -186,16 +44,6 @@ export const TodaysWorkoutModule = ({
           : day
       )
     );
-  };
-
-  const formatTimeRemaining = (hours: number) => {
-    if (hours < 1) {
-      return `${Math.round(hours * 60)} minutes`;
-    }
-    if (hours < 24) {
-      return `${Math.floor(hours)} hours`;
-    }
-    return `${Math.floor(hours / 24)} days`;
   };
 
   if (!todayWorkout) return null;
