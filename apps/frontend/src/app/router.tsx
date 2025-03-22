@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouteObject } from 'react-router-dom';
 import { SidebarLayout } from '../components/sidebar-layout';
 import { DashboardPage } from '../pages/dashboard.page';
 import { _FULL_ROUTES } from './route';
@@ -7,6 +7,17 @@ import { AchievementsPage } from '../pages/achievements.page';
 import { DailyRoutinePage } from '../pages/daily-routine.page';
 import { LoginPage } from '../pages/user/auth/login.page';
 import { RegisterPage } from '../pages/user/auth/register.page';
+
+const authRoutes: RouteObject[] = [
+  {
+    path: _FULL_ROUTES.LOGIN,
+    element: <LoginPage />,
+  },
+  {
+    path: _FULL_ROUTES.REGISTER,
+    element: <RegisterPage />,
+  },
+];
 
 export const router = createBrowserRouter([
   {
@@ -35,12 +46,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: _FULL_ROUTES.LOGIN,
-    element: <LoginPage />,
-  },
-  {
-    path: _FULL_ROUTES.REGISTER,
-    element: <RegisterPage />,
-  },
+  ...authRoutes,
 ]);
