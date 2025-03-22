@@ -5,7 +5,7 @@ import { UserSettingsHotKeyProvider } from './user-settings-provider';
 
 export function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <UserSettingsHotKeyProvider>
         <RouterProvider router={router} />
       </UserSettingsHotKeyProvider>

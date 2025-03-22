@@ -5,6 +5,7 @@ import { _FULL_ROUTES } from './route';
 import { AIGeneratorPage } from '../pages/ai-generator.page';
 import { AchievementsPage } from '../pages/achievements.page';
 import { DailyRoutinePage } from '../pages/daily-routine.page';
+import { LoginPage } from '../pages/user/auth/login.page';
 
 export const router = createBrowserRouter([
   {
@@ -32,5 +33,9 @@ export const router = createBrowserRouter([
         element: <DailyRoutinePage />,
       },
     ],
+  },
+  {
+    path: _FULL_ROUTES.LOGIN,
+    element: <LoginPage />,
   },
 ]);
