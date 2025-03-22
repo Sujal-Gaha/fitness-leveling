@@ -6,6 +6,7 @@ import { AIGeneratorPage } from '../pages/ai-generator.page';
 import { AchievementsPage } from '../pages/achievements.page';
 import { DailyRoutinePage } from '../pages/daily-routine.page';
 import { LoginPage } from '../pages/user/auth/login.page';
+import { RegisterPage } from '../pages/user/auth/register.page';
 
 export const router = createBrowserRouter([
   {
@@ -37,5 +38,9 @@ export const router = createBrowserRouter([
   {
     path: _FULL_ROUTES.LOGIN,
     element: <LoginPage />,
+  },
+  {
+    path: _FULL_ROUTES.REGISTER,
+    element: <RegisterPage />,
   },
 ]);
