@@ -4,10 +4,14 @@ import { Calendar, Clock } from 'lucide-react';
 import { DailyRoutine, ScheduleDay } from '../../utils/DailyRoutine';
 import { formatTimeRemaining } from '../../utils/time';
 
-export const WeeklyTrainingSplitModule = ({ schedule }: { schedule: ScheduleDay[] }) => {
+export const WeeklyTrainingSplitModule = ({
+  schedule,
+  dailyRoutine,
+}: {
+  schedule: ScheduleDay[];
+  dailyRoutine: DailyRoutine;
+}) => {
   const today = new Date();
-
-  const dailyRoutine = new DailyRoutine(schedule);
 
   const getWorkoutTypeColor = dailyRoutine.getWorkoutTypeColor;
   const getWorkoutTypeIcon = dailyRoutine.getWorkoutTypeIcon;

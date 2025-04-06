@@ -4,9 +4,13 @@ import { format } from 'date-fns';
 import { DailyRoutine, ScheduleDay } from '../../utils/DailyRoutine';
 import { formatTimeRemaining } from '../../utils/time';
 
-export const UpcomingWorkoutsModule = ({ schedule }: { schedule: ScheduleDay[] }) => {
-  const dailyRoutine = new DailyRoutine(schedule);
-
+export const UpcomingWorkoutsModule = ({
+  dailyRoutine,
+  schedule,
+}: {
+  dailyRoutine: DailyRoutine;
+  schedule: ScheduleDay[];
+}) => {
   const { todayIndex } = dailyRoutine.getTodayIndex();
   const calculateDayProgress = dailyRoutine.calculateDayProgress;
   const getWorkoutTypeIcon = dailyRoutine.getWorkoutTypeIcon;

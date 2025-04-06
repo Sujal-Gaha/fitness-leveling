@@ -17,16 +17,14 @@ import { DailyRoutine, ScheduleDay, Stretch, WorkoutType } from '../../utils/Dai
 import { formatTimeRemaining } from '../../utils/time';
 
 export const TodaysWorkoutModule = ({
-  schedule,
+  dailyRoutine,
   setSchedule,
   stretchingSuggestions,
 }: {
-  schedule: ScheduleDay[];
+  dailyRoutine: DailyRoutine;
   setSchedule: Dispatch<SetStateAction<ScheduleDay[]>>;
   stretchingSuggestions: Record<WorkoutType, Stretch[]>;
 }) => {
-  const dailyRoutine = new DailyRoutine(schedule);
-
   const { todayIndex } = dailyRoutine.getTodayIndex();
   const { todayWorkout } = dailyRoutine.getTodayWorkout();
   const calculateDayProgress = dailyRoutine.calculateDayProgress;

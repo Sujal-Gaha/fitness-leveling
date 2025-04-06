@@ -7,7 +7,7 @@ import { UpcomingWorkoutsModule } from '../modules/user/upcoming-workouts.module
 import { TodaysWorkoutModule } from '../modules/user/todays-workout.module.';
 import { StretchingGuideModule } from '../modules/user/stretching-guide.module';
 import { WeeklyTrainingSplitModule } from '../modules/user/weekly-training-split.module';
-import { ScheduleDay, Stretch, WorkoutType } from '../utils/DailyRoutine';
+import { DailyRoutine, ScheduleDay, Stretch, WorkoutType } from '../utils/DailyRoutine';
 import { Penalty } from '../utils/Penalty';
 
 type TabItem = {
@@ -20,12 +20,6 @@ export const DailyRoutinePage = () => {
   const today = new Date();
 
   const [showPenaltyWarning, setShowPenaltyWarning] = useState(false);
-
-  useEffect(() => {
-    if (Math.random() > 0.5) {
-      setShowPenaltyWarning(true);
-    }
-  }, []);
 
   const [schedule, setSchedule] = useState<ScheduleDay[]>([
     {
@@ -121,6 +115,14 @@ export const DailyRoutinePage = () => {
       ],
     },
   ]);
+
+  const dailyRoutine = new DailyRoutine(schedule);
+
+  useEffect(() => {
+    if (Math.random() > 0.5) {
+      setShowPenaltyWarning(true);
+    }
+  }, []);
 
   const penalties: Penalty[] = [
     {
@@ -285,13 +287,17 @@ export const DailyRoutinePage = () => {
       value: 'today',
       Component: (
         <TodaysWorkoutModule
-          schedule={schedule}
+          dailyRoutine={dailyRoutine}
           setSchedule={setSchedule}
           stretchingSuggestions={stretchingSuggestions}
         />
       ),
     },
-    { label: 'Upcoming Workouts', value: 'upcoming', Component: <UpcomingWorkoutsModule schedule={schedule} /> },
+    {
+      label: 'Upcoming Workouts',
+      value: 'upcoming',
+      Component: <UpcomingWorkoutsModule dailyRoutine={dailyRoutine} schedule={schedule} />,
+    },
     {
       label: 'Stretching Guide',
       value: 'stretches',
@@ -309,7 +315,7 @@ export const DailyRoutinePage = () => {
 
       {showPenaltyWarning && <PenaltySystem onClose={() => setShowPenaltyWarning(false)} />}
 
-      <WeeklyTrainingSplitModule schedule={schedule} />
+      <WeeklyTrainingSplitModule dailyRoutine={dailyRoutine} schedule={schedule} />
 
       <Tabs defaultValue="today" className="space-y-4">
         <TabsList>
@@ -327,7 +333,7 @@ export const DailyRoutinePage = () => {
         ))}
       </Tabs>
 
-      <NextRestDayModule schedule={schedule} />
+      <NextRestDayModule dailyRoutine={dailyRoutine} />
     </div>
   );
 };

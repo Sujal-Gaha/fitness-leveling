@@ -11,11 +11,9 @@ import {
   TooltipTrigger,
 } from '@libs/components';
 import { format } from 'date-fns';
-import { DailyRoutine, ScheduleDay } from '../../utils/DailyRoutine';
+import { DailyRoutine } from '../../utils/DailyRoutine';
 
-export const NextRestDayModule = ({ schedule }: { schedule: ScheduleDay[] }) => {
-  const dailyRoutine = new DailyRoutine(schedule);
-
+export const NextRestDayModule = ({ dailyRoutine }: { dailyRoutine: DailyRoutine }) => {
   const { nextRestDay } = dailyRoutine.getNextRestDay();
 
   if (!nextRestDay) return null;
