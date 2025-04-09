@@ -148,6 +148,36 @@ const categories: Category[] = [
   },
 ];
 
+const PromptCard = ({ prompt }: { prompt: Prompt }) => {
+  return (
+    <Card className="overflow-hidden border-primary/20 hover:border-primary/50 transition-colors">
+      <CardHeader className="p-4 pb-0">
+        <CardTitle className="text-base">{prompt.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">"{prompt.prompt}"</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {prompt.tags.map((tag, tagIndex) => (
+            <Badge key={tagIndex} variant="secondary" className="text-xs">
+              {tag}
+            </Badge>
+          ))}
+        </div>
+        <Button variant="outline" size="sm" className="w-full" asChild>
+          <Link
+            to={`/ai-generator?prompt=${encodeURIComponent(prompt.prompt)}`}
+            className="flex items-center justify-center"
+          >
+            <Zap className="mr-2 h-3.5 w-3.5" />
+            Use This Prompt
+            <ArrowRight className="ml-2 h-3.5 w-3.5" />
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
 export const PopularPromptsModule = ({ categories }: { categories: Category[] }) => {
   return (
     <div className="space-y-4">
@@ -186,34 +216,7 @@ export const PopularPromptsModule = ({ categories }: { categories: Category[] })
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-2">
                   {category.prompts.map((prompt, index) => (
-                    <Card
-                      key={index}
-                      className="overflow-hidden border-primary/20 hover:border-primary/50 transition-colors"
-                    >
-                      <CardHeader className="p-4 pb-0">
-                        <CardTitle className="text-base">{prompt.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-4">
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">"{prompt.prompt}"</p>
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {prompt.tags.map((tag, tagIndex) => (
-                            <Badge key={tagIndex} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <Button variant="outline" size="sm" className="w-full" asChild>
-                          <Link
-                            to={`/ai-generator?prompt=${encodeURIComponent(prompt.prompt)}`}
-                            className="flex items-center justify-center"
-                          >
-                            <Zap className="mr-2 h-3.5 w-3.5" />
-                            Use This Prompt
-                            <ArrowRight className="ml-2 h-3.5 w-3.5" />
-                          </Link>
-                        </Button>
-                      </CardContent>
-                    </Card>
+                    <PromptCard key={index} prompt={prompt} />
                   ))}
                 </div>
               </CardContent>
