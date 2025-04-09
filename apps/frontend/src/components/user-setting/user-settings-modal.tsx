@@ -1,7 +1,9 @@
 import { Button, Dialog, DialogClose, DialogContent, DialogTitle, Switch } from '@libs/components';
-import { useUserSettingsModalStore } from '../stores/useUserSettingsModalStore';
+import { useUserSettingsModalStore } from '../../stores/useUserSettingsModalStore';
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import { GeneralSection } from './general-section';
+import { UserProfileSection } from './user-profile-section';
 
 type ActiveSection = 'GENERAL' | 'USER_PROFILE';
 
@@ -19,6 +21,11 @@ export const UserSettingsModal = () => {
     { id: 1, value: 'GENERAL', label: 'General' },
     { id: 2, value: 'USER_PROFILE', label: 'User Profile' },
   ];
+
+  const getActiveSection = () => {
+    if (activeSection === 'GENERAL') return <GeneralSection />;
+    if (activeSection === 'USER_PROFILE') return <UserProfileSection />;
+  };
 
   return (
     <Dialog open={isUserSettingsModalOpen} onOpenChange={setUserSettingsModalOpen}>
@@ -54,33 +61,7 @@ export const UserSettingsModal = () => {
               </DialogClose>
             </div>
 
-            <div className="p-6 space-y-6">
-              {activeSection === 'GENERAL' && (
-                <>
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-medium">Notifications</h3>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm text-muted-foreground">
-                        Turn this off to prevent the app from sending notifications
-                      </p>
-                      <Switch id="auto-updates" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-medium">Help</h3>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm text-muted-foreground">
-                        Learn how to use the app and get help from the community.
-                      </p>
-                      <Button variant="outline" size="sm">
-                        Open
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
+            <div className="p-6 space-y-6">{getActiveSection()}</div>
           </div>
         </div>
       </DialogContent>
